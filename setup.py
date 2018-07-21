@@ -20,7 +20,7 @@ setup(
     ],
     entry_points= {
         'console_scripts': [
-            'time_clock = time_clock.__main__:main'
+            'time_clock = time_clock.__main__'
         ]
     },
     include_package_data=True)

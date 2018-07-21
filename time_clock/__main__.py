@@ -4,6 +4,7 @@ import time
 import os
 from OpenTask import OpenTask
 from CloseTask import CloseTask
+from Export import Export
 
 
 def dir_check():
@@ -27,7 +28,11 @@ def close_ticket(args):
         CloseTask(directory)
 
 def export_data(args):
-    print(args)
+    directory = dir_check()
+    if '.open' in os.listdir(directory):
+        print('Please close the open ticket to continue')
+    else:
+        Export(directory, args)
 
 
 parser = argparse.ArgumentParser()
@@ -50,6 +55,11 @@ export_parser.add_argument(
     '-m',
     help='Export data for month',
     metavar='1-12',
+    type=int)
+export_parser.add_argument(
+    '--year',
+    '-y',
+    help='Year to export',
     type=int)
 export_parser.set_defaults(func=export_data)
 
