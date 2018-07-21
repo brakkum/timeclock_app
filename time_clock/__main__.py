@@ -1,6 +1,9 @@
 import argparse
+import datetime
+import time
 import os
-from TaskManager import TaskManager
+from OpenTask import OpenTask
+
 
 parser = argparse.ArgumentParser(allow_abbrev=True)
 
@@ -9,6 +12,11 @@ parser.add_argument(
     '-t',
     help='what task is being worked on',
     type=str)
+parser.add_argument(
+    '--close',
+    '-c',
+    help='Close the currently open ticket',
+    action='store_true')
 
 args = parser.parse_args()
 print(args)
@@ -23,7 +31,10 @@ def dir_check():
 def main():
     directory = dir_check()
     if args.ticket:
-        TaskManager(args.ticket, directory)
+        if '.open' in os.listdir(directory):
+            print('There is already an open task, please close.')
+        else: 
+            OpenTask(args.ticket, directory)
     else:
         print('no task')
 
