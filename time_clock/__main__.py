@@ -5,7 +5,7 @@ from TaskManager import TaskManager
 parser = argparse.ArgumentParser(allow_abbrev=True)
 
 parser.add_argument(
-    '--task',
+    '--ticket',
     '-t',
     help='what task is being worked on',
     type=str)
@@ -15,16 +15,15 @@ print(args)
 
 def dir_check():
     home = os.path.expanduser('~')
-    if os.path.isdir('{}/.timesheets'.format(home)):
-        return
-    else:
+    if not os.path.isdir('{}/.timesheets'.format(home)):
         os.mkdir('{}/.timesheets'.format(home))
+    return '{}/.timesheets'.format(home)
 
 
 def main():
-    dir_check()
-    if args.task:
-        TaskManager(args)
+    directory = dir_check()
+    if args.ticket:
+        TaskManager(args.ticket, directory)
     else:
         print('no task')
 
