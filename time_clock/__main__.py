@@ -6,44 +6,52 @@ from OpenTask import OpenTask
 from CloseTask import CloseTask
 
 
-parser = argparse.ArgumentParser(allow_abbrev=True)
-
-parser.add_argument(
-    '--ticket',
-    '-t',
-    help='what task is being worked on',
-    type=str)
-parser.add_argument(
-    '--close',
-    '-c',
-    help='Close the currently open ticket',
-    action='store_true')
-
-args = parser.parse_args()
-print(args)
-
 def dir_check():
     home = os.path.expanduser('~')
     if not os.path.isdir('{}/.timesheets'.format(home)):
         os.mkdir('{}/.timesheets'.format(home))
     return '{}/.timesheets'.format(home)
 
-
-def main():
+def new_ticket(args):
     directory = dir_check()
-    if args.ticket:
-        if '.open' in os.listdir(directory):
-            print('There is already an open task, please close.')
-        else: 
-            OpenTask(args.ticket, directory)
-    elif args.close:
-        if not '.open' in os.listdir(directory):
-            print('No ticket to close')
-        else:
-            CloseTask(directory)
+    if '.open' in os.listdir(directory):
+        print('There is already an open task, please close.')
+    else: 
+        OpenTask(args.ticket, directory)
+
+def close_ticket(args):
+    directory = dir_check()
+    if not '.open' in os.listdir(directory):
+        print('No ticket to close')
     else:
-        print('no task')
+        CloseTask(directory)
+
+def export_data(args):
+    print(args)
 
 
-if __name__ == '__main__':
-    main()
+parser = argparse.ArgumentParser()
+subparsers = parser.add_subparsers()
+
+task_parser = subparsers.add_parser('ticket')
+task_parser.add_argument(
+    'ticket',
+    help='What task is being worked on',
+    metavar='ticket',
+    type=str)
+task_parser.set_defaults(func=new_ticket)
+
+close_parser = subparsers.add_parser('close')
+close_parser.set_defaults(func=close_ticket)
+
+export_parser = subparsers.add_parser('export')
+export_parser.add_argument(
+    '--month',
+    '-m',
+    help='Export data for month',
+    metavar='1-12',
+    type=int)
+export_parser.set_defaults(func=export_data)
+
+args = parser.parse_args()
+args.func(args)

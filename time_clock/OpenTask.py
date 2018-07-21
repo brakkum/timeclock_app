@@ -13,6 +13,7 @@ class OpenTask():
         self.today = str(datetime.date.today().day)
         self.make_day_dir()
         self.day_dir = '{}/{}/{}/{}'.format(self.directory, self.year, self.month, self.today)
+        self.same_ticket()
         self.ticket_path = '{}/{}'.format(self.day_dir, self.ticket) 
         self.start()
 
@@ -27,6 +28,10 @@ class OpenTask():
     def make_day_dir(self):
         if self.today not in os.listdir('{}/{}/{}'.format(self.directory, self.year, self.month)):
             os.mkdir('{}/{}/{}/{}'.format(self.directory, self.year, self.month, self.today))
+
+    def same_ticket(self):
+        if self.ticket in os.listdir(self.day_dir):
+            self.ticket += '__{}'.format(datetime.datetime.now().strftime("%I:%M%p"))
 
     def start(self):
         open_file = open('{}/.open'.format(self.directory), 'a')
