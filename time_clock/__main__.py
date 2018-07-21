@@ -3,6 +3,7 @@ import datetime
 import time
 import os
 from OpenTask import OpenTask
+from CloseTask import CloseTask
 
 
 parser = argparse.ArgumentParser(allow_abbrev=True)
@@ -35,6 +36,11 @@ def main():
             print('There is already an open task, please close.')
         else: 
             OpenTask(args.ticket, directory)
+    elif args.close:
+        if not '.open' in os.listdir(directory):
+            print('No ticket to close')
+        else:
+            CloseTask(directory)
     else:
         print('no task')
 

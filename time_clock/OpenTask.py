@@ -30,7 +30,7 @@ class OpenTask():
 
     def start(self):
         open_file = open('{}/.open'.format(self.directory), 'a')
-        open_file.write(self.ticket_path + '\n') #path to ticket
+        open_file.write(self.ticket_path + '::') #path to ticket
         open_file.write(str(int(time.time()))) #time
         open_file.close()
         print('Started working on {} at {}'.format(self.ticket, datetime.datetime.now().strftime("%I:%M%p")))
