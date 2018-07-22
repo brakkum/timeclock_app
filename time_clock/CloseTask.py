@@ -7,6 +7,8 @@ class CloseTask():
         self.contents = self.open_file()
         self.file_path = self.contents[0]
         self.start_time = self.contents[1]
+        self.project = self.contents[2] if self.contents[2] else ''
+        self.ticket = self.contents[3] if self.contents[3] else ''
         self.archive()
         self.clear_open()
 
@@ -19,6 +21,8 @@ class CloseTask():
     def archive(self):
         ticket_file = open(self.file_path, 'a')
         ticket_file.write('\n' + str(int(time.time())))
+        ticket_file.write('\n' + self.project)
+        ticket_file.write('\n' + self.ticket)
         ticket_file.close()
 
     def clear_open(self):

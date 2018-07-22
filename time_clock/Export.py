@@ -21,9 +21,9 @@ class Export():
                 start_time = int(item[0])
                 end_time = int(item[1])
                 seconds += end_time - start_time
-        return self.seconds_to_hours(seconds)
+        return self.seconds_to_quarter_hours(seconds)
 
-    def seconds_to_hours(self, seconds):
+    def seconds_to_quarter_hours(self, seconds):
         hours = seconds / 3600
         quarters = round(hours / .25)
         return quarters * .25

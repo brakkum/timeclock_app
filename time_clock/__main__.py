@@ -18,7 +18,7 @@ def new_ticket(args):
     if '.open' in os.listdir(directory):
         print('There is already an open task, please close.')
     else: 
-        OpenTask(args.ticket, directory)
+        OpenTask(directory, args)
 
 def close_ticket(args):
     directory = dir_check()
@@ -43,6 +43,12 @@ task_parser.add_argument(
     'ticket',
     help='What task is being worked on',
     metavar='ticket',
+    type=str)
+task_parser.add_argument(
+    '--project',
+    '-p',
+    help='What project is this task a part of',
+    metavar='',
     type=str)
 task_parser.set_defaults(func=new_ticket)
 

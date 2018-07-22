@@ -3,9 +3,11 @@ import time
 import os
 
 class OpenTask():
-    def __init__(self, ticket, directory):
-        self.ticket = ticket
+    def __init__(self, directory, args):
+        self.args = args
+        self.ticket = self.args.ticket
         self.directory = directory
+        self.project = self.args.project if self.args.project else ''
         self.year = str(datetime.date.today().year)
         self.make_year_dir()
         self.month = str(datetime.date.today().month)
@@ -14,7 +16,7 @@ class OpenTask():
         self.make_day_dir()
         self.day_dir = '{}/{}/{}/{}'.format(self.directory, self.year, self.month, self.today)
         self.same_ticket()
-        self.ticket_path = '{}/{}'.format(self.day_dir, self.ticket) 
+        self.ticket_path = '{}/{}'.format(self.day_dir, self.ticket)
         self.start()
 
     def make_year_dir(self):
@@ -36,7 +38,9 @@ class OpenTask():
     def start(self):
         open_file = open('{}/.open'.format(self.directory), 'a')
         open_file.write(self.ticket_path + '::') #path to ticket
-        open_file.write(str(int(time.time()))) #time
+        open_file.write(str(int(time.time())) + '::') #time
+        open_file.write(self.project + '::') # project
+        open_file.write(self.ticket) # ticket
         open_file.close()
         print('Started working on {} at {}'.format(self.ticket, datetime.datetime.now().strftime("%I:%M%p")))
         self.make_archive()
