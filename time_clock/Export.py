@@ -5,11 +5,14 @@ class Export():
     def __init__(self, directory, args):
         self.directory = directory
         self.args = args
+        self.set_options()
+        self.hours_worked = self.get_month_total()
+        print(self.hours_worked)
+
+    def set_options(self):
         self.month = self.args.month if self.args.month else datetime.date.today().month
         self.year = self.args.year if self.args.year else datetime.date.today().year
         self.month_dir = '{}/{}/{}'.format(self.directory, self.year, self.month)
-        self.hours = self.get_month_total()
-        print(self.hours)
 
     def get_month_total(self):
         days_worked = [x for x in os.listdir(self.month_dir) if x != '.DS_Store']

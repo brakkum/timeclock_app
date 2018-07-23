@@ -8,6 +8,11 @@ class OpenTask():
         self.ticket = self.args.ticket
         self.directory = directory
         self.project = self.args.project if self.args.project else ''
+        self.make_directories()
+        self.make_unique_ticket()
+        self.start()
+
+    def make_directories(self):
         self.year = str(datetime.date.today().year)
         self.make_year_dir()
         self.month = str(datetime.date.today().month)
@@ -15,9 +20,6 @@ class OpenTask():
         self.today = str(datetime.date.today().day)
         self.make_day_dir()
         self.day_dir = '{}/{}/{}/{}'.format(self.directory, self.year, self.month, self.today)
-        self.same_ticket()
-        self.ticket_path = '{}/{}'.format(self.day_dir, self.ticket)
-        self.start()
 
     def make_year_dir(self):
         if self.year not in os.listdir(self.directory):
@@ -31,9 +33,11 @@ class OpenTask():
         if self.today not in os.listdir('{}/{}/{}'.format(self.directory, self.year, self.month)):
             os.mkdir('{}/{}/{}/{}'.format(self.directory, self.year, self.month, self.today))
 
-    def same_ticket(self):
+    # If ticket already exists mark it with timestamp
+    def make_unique_ticket(self):
         if self.ticket in os.listdir(self.day_dir):
             self.ticket += '__{}'.format(datetime.datetime.now().strftime("%I:%M%p"))
+        self.ticket_path = '{}/{}'.format(self.day_dir, self.ticket)
 
     def start(self):
         open_file = open('{}/.open'.format(self.directory), 'a')
