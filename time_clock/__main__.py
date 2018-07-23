@@ -48,7 +48,7 @@ task_parser.add_argument(
     '--project',
     '-p',
     help='What project is this task a part of',
-    metavar='',
+    metavar='x',
     type=str)
 task_parser.set_defaults(func=new_ticket)
 
