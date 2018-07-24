@@ -1,0 +1,2 @@
+include time_clock/config.ini
+recursive-include time_clock *.py

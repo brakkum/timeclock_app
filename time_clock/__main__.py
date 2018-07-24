@@ -3,15 +3,15 @@ import argparse
 import datetime
 import time
 import os
-from time_clock.bin.open_task import OpenTask
-from time_clock.bin.close_task import CloseTask
-from time_clock.bin.export import Export
+from time_clock.open_task import OpenTask
+from time_clock.close_task import CloseTask
+from time_clock.export import Export
 
 
 
 def get_config(opt):
     config = SafeConfigParser()
-    config.read('config.ini')
+    config.read('./time_clock/config.ini')
     return config.getboolean('options', opt)
 
 def dir_check():
