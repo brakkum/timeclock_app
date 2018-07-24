@@ -6,6 +6,9 @@ class OpenTask():
     def __init__(self, directory, args):
         self.args = args
         self.ticket = self.args.ticket
+        if '_' in self.ticket:
+            print('The character "_" is not allowed.')
+            return
         self.directory = directory
         self.project = self.args.project if self.args.project else ''
         self.make_directories()

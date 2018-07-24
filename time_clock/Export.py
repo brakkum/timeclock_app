@@ -6,8 +6,7 @@ class Export():
         self.directory = directory
         self.args = args
         self.set_options()
-        self.hours_worked = self.return_hours()
-        print(self.hours_worked)
+        self.return_hours()
 
     def set_options(self):
         self.month = self.args.month if self.args.month else datetime.date.today().month
@@ -33,7 +32,11 @@ class Export():
                 day = open('{}/{}/{}'.format(self.month_dir, days, items), 'r').readlines()
                 if day[3].strip('\n').split('_')[0] == 't{}'.format(self.ticket):
                     seconds += int(day[1]) - int(day[0])
-        return self.seconds_to_quarter_hours(seconds)
+        if seconds == 0:
+            print('No tickets found')
+            return
+        else:
+            print(self.seconds_to_quarter_hours(seconds))
 
     def get_project_total(self):
         seconds = 0
@@ -43,7 +46,11 @@ class Export():
                 day = open('{}/{}/{}'.format(self.month_dir, days, items), 'r').readlines()
                 if day[2].strip('\n') == 'p{}'.format(self.project):
                     seconds += int(day[1]) - int(day[0])
-        return self.seconds_to_quarter_hours(seconds)
+        if seconds == 0:
+            print('No projects found')
+            return
+        else:
+            print(self.seconds_to_quarter_hours(seconds))
 
     def get_month_total(self):
         days_worked = [x for x in os.listdir(self.month_dir) if x != '.DS_Store']
@@ -51,11 +58,15 @@ class Export():
         for days in days_worked:
             day_items = [x for x in os.listdir('{}/{}'.format(self.month_dir, days)) if x != '.DS_Store']
             for items in day_items:
-                item = open('{}/{}/{}'.format(self.month_dir, days, items)).readlines().rstrip()
+                item = open('{}/{}/{}'.format(self.month_dir, days, items)).readlines()
                 start_time = int(item[0])
                 end_time = int(item[1])
                 seconds += end_time - start_time
-        return self.seconds_to_quarter_hours(seconds)
+        if seconds == 0:
+            print('No time found')
+            return
+        else:
+            print(self.seconds_to_quarter_hours(seconds))
 
     def seconds_to_quarter_hours(self, seconds):
         hours = seconds / 3600
