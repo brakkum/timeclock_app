@@ -9,6 +9,14 @@ from time_clock.export import Export
 
 
 
+def set_config(args):
+    config = SafeConfigParser()
+    config.read('./time_clock/config.ini')
+    if args.set in config['options']:
+        config.set('options', args.set, args.value)
+        with open('./time_clock/config.ini', 'w') as config_file:
+            config.write(config_file)
+
 def get_config(opt):
     config = SafeConfigParser()
     config.read('./time_clock/config.ini')
@@ -98,6 +106,20 @@ export_parser.add_argument(
     help='Company to gather time for',
     type=str)
 export_parser.set_defaults(func=export_data)
+
+config_parser = subparsers.add_parser('config')
+config_set = config_parser.add_mutually_exclusive_group()
+config_set.add_argument(
+    '--set',
+    '-s',
+    help='config option to set',
+    type=str)
+config_parser.add_argument(
+    'value',
+    help='boolean true/false',
+    choices=['true', 'false'],
+    type=str)
+config_parser.set_defaults(func=set_config)
 
 args = parser.parse_args()
 
