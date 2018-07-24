@@ -56,13 +56,14 @@ close_parser = subparsers.add_parser('close')
 close_parser.set_defaults(func=close_ticket)
 
 export_parser = subparsers.add_parser('export')
-export_parser.add_argument(
+date = export_parser.add_mutually_exclusive_group()
+date.add_argument(
     '--month',
     '-m',
     help='Export data for month',
     metavar='1-12',
     type=int)
-export_parser.add_argument(
+date.add_argument(
     '--year',
     '-y',
     help='Year to export',
