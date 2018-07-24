@@ -6,7 +6,7 @@ class Export():
         self.directory = directory
         self.args = args
         self.set_options()
-        self.return_hours()
+        self.get_records()
 
     def set_options(self):
         self.month = self.args.month if self.args.month else datetime.date.today().month
@@ -14,51 +14,12 @@ class Export():
         self.month_dir = '{}/{}/{}'.format(self.directory, self.year, self.month)
         self.project = self.args.project if self.args.project else ''
         self.ticket = self.args.ticket if self.args.ticket else ''
+        if '__' in self.ticket:
+            self.ticket = self.ticket.replace('__', '_')
+        if '_' in self.ticket:
+            self.ticket = self.ticket.replace('_', '-')
 
-
-    def return_hours(self):
-        if self.project:
-            return self.get_project_total()
-        elif self.ticket:
-            return self.get_ticket_total()
-        else:
-            return self.get_month_total()
-
-    def get_ticket_total(self):
-        try:
-            total_days = [x for x in os.listdir(self.month_dir) if x != '.DS_Store']
-            seconds = 0
-            for days in total_days:
-                for items in os.listdir('{}/{}'.format(self.month_dir, days)):
-                    day = open('{}/{}/{}'.format(self.month_dir, days, items), 'r').readlines()
-                    if day[3].strip('\n').split('_')[0] == 't{}'.format(self.ticket):
-                        seconds += int(day[1]) - int(day[0])
-            if seconds == 0:
-                print('No tickets found')
-                return
-            else:
-                print(self.seconds_to_quarter_hours(seconds))
-        except:
-            print('That month has no records')
-
-    def get_project_total(self):
-        try:
-            total_days = [x for x in os.listdir(self.month_dir) if x != '.DS_Store']
-            seconds = 0
-            for days in total_days:
-                for items in os.listdir('{}/{}'.format(self.month_dir, days)):
-                    day = open('{}/{}/{}'.format(self.month_dir, days, items), 'r').readlines()
-                    if day[2].strip('\n') == 'p{}'.format(self.project):
-                        seconds += int(day[1]) - int(day[0])
-            if seconds == 0:
-                print('No projects found')
-                return
-            else:
-                print(self.seconds_to_quarter_hours(seconds))
-        except:
-            print('That month has no records')
-
-    def get_month_total(self):
+    def get_records(self):
         try:
             days_worked = [x for x in os.listdir(self.month_dir) if x != '.DS_Store']
             seconds = 0
@@ -66,9 +27,18 @@ class Export():
                 day_items = [x for x in os.listdir('{}/{}'.format(self.month_dir, days)) if x != '.DS_Store']
                 for items in day_items:
                     item = open('{}/{}/{}'.format(self.month_dir, days, items)).readlines()
-                    start_time = int(item[0])
-                    end_time = int(item[1])
-                    seconds += end_time - start_time
+                    if self.ticket and self.project:
+                        if (item[3].strip('\n').split('__')[0] == 't{}'.format(self.ticket)
+                            and item[2].strip('\n') == 'p{}'.format(self.project)):
+                            seconds += int(item[1]) - int(item[0])
+                    elif self.ticket:
+                        if item[3].strip('\n').split('__')[0] == 't{}'.format(self.ticket):
+                            seconds += int(item[1]) - int(item[0])
+                    elif self.project:
+                        if item[2].strip('\n') == 'p{}'.format(self.project):
+                            seconds += int(item[1]) - int(item[0])
+                    else:
+                        seconds += int(item[1]) - int(item[0])
             if seconds == 0:
                 print('No time found')
                 return

@@ -67,13 +67,12 @@ export_parser.add_argument(
     '-y',
     help='Year to export',
     type=int)
-args = export_parser.add_mutually_exclusive_group()
-args.add_argument(
+export_parser.add_argument(
     '--project',
     '-p',
     help='Project to gather time for',
     type=str)
-args.add_argument(
+export_parser.add_argument(
     '--ticket',
     '-t',
     help='Ticket to gather time for',
