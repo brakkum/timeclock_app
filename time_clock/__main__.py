@@ -2,9 +2,9 @@ import argparse
 import datetime
 import time
 import os
-from OpenTask import OpenTask
-from CloseTask import CloseTask
-from Export import Export
+from time_clock.bin.open_task import OpenTask
+from time_clock.bin.close_task import CloseTask
+from time_clock.bin.export import Export
 
 
 def dir_check():
@@ -91,4 +91,6 @@ export_parser.add_argument(
 export_parser.set_defaults(func=export_data)
 
 args = parser.parse_args()
-args.func(args)
+
+def main():
+    args.func(args)
