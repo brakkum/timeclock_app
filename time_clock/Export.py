@@ -6,13 +6,31 @@ class Export():
         self.directory = directory
         self.args = args
         self.set_options()
-        self.hours_worked = self.get_month_total()
+        self.hours_worked = self.return_hours()
         print(self.hours_worked)
 
     def set_options(self):
         self.month = self.args.month if self.args.month else datetime.date.today().month
         self.year = self.args.year if self.args.year else datetime.date.today().year
         self.month_dir = '{}/{}/{}'.format(self.directory, self.year, self.month)
+        self.project = self.args.project if self.args.project else ''
+
+
+    def return_hours(self):
+        if self.project:
+            return self.get_project_total()
+        else:
+            return self.get_month_total()
+
+    def get_project_total(self):
+        seconds = 0
+        total_days = [x for x in os.listdir(self.month_dir) if x != '.DS_Store']
+        for days in total_days:
+            for items in os.listdir('{}/{}'.format(self.month_dir, days)):
+                day = open('{}/{}/{}'.format(self.month_dir, days, items), 'r').readlines()
+                if day[2].strip('\n') == 'p{}'.format(self.project):
+                    seconds += int(day[1]) - int(day[0])
+        return self.seconds_to_quarter_hours(seconds)
 
     def get_month_total(self):
         days_worked = [x for x in os.listdir(self.month_dir) if x != '.DS_Store']
@@ -20,7 +38,7 @@ class Export():
         for days in days_worked:
             day_items = [x for x in os.listdir('{}/{}'.format(self.month_dir, days)) if x != '.DS_Store']
             for items in day_items:
-                item = open('{}/{}/{}'.format(self.month_dir, days, items)).readlines()
+                item = open('{}/{}/{}'.format(self.month_dir, days, items)).readlines().rstrip()
                 start_time = int(item[0])
                 end_time = int(item[1])
                 seconds += end_time - start_time
