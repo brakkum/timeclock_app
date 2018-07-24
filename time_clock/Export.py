@@ -31,7 +31,7 @@ class Export():
         for days in total_days:
             for items in os.listdir('{}/{}'.format(self.month_dir, days)):
                 day = open('{}/{}/{}'.format(self.month_dir, days, items), 'r').readlines()
-                if day[3].strip('\n').startswith('t{}'.format(self.ticket)):
+                if day[3].strip('\n').split('_')[0] == 't{}'.format(self.ticket):
                     seconds += int(day[1]) - int(day[0])
         return self.seconds_to_quarter_hours(seconds)
 
