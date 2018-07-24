@@ -50,6 +50,12 @@ task_parser.add_argument(
     help='What project is this task a part of',
     metavar='x',
     type=str)
+task_parser.add_argument(
+    '--company',
+    '-c',
+    help='What company is this task for',
+    metavar='y',
+    type=str)
 task_parser.set_defaults(func=new_ticket)
 
 close_parser = subparsers.add_parser('close')
@@ -76,6 +82,11 @@ export_parser.add_argument(
     '--ticket',
     '-t',
     help='Ticket to gather time for',
+    type=str)
+export_parser.add_argument(
+    '--company',
+    '-c',
+    help='Company to gather time for',
     type=str)
 export_parser.set_defaults(func=export_data)
 

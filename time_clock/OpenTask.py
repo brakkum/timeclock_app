@@ -12,6 +12,7 @@ class OpenTask():
             self.ticket = self.ticket.replace('_', '-')
         self.directory = directory
         self.project = self.args.project if self.args.project else ''
+        self.company = self.args.company if self.args.company else ''
         self.make_directories()
         self.make_unique_ticket()
         self.start()
@@ -47,7 +48,8 @@ class OpenTask():
         open_file.write(self.ticket_path + '::') #path to ticket
         open_file.write(str(int(time.time())) + '::') #time
         open_file.write(self.project + '::') # project
-        open_file.write(self.ticket) # ticket
+        open_file.write(self.ticket + '::') # ticket
+        open_file.write(self.company + '::') # company
         open_file.close()
         print('Started working on {} at {}'.format(self.ticket, datetime.datetime.now().strftime("%I:%M%p")))
         self.make_archive()
