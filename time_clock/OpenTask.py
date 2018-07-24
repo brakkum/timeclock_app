@@ -33,10 +33,9 @@ class OpenTask():
         if self.today not in os.listdir('{}/{}/{}'.format(self.directory, self.year, self.month)):
             os.mkdir('{}/{}/{}/{}'.format(self.directory, self.year, self.month, self.today))
 
-    # If ticket already exists mark it with timestamp
     def make_unique_ticket(self):
         if self.ticket in os.listdir(self.day_dir):
-            self.ticket += '__{}'.format(datetime.datetime.now().strftime("%I:%M%p"))
+            self.ticket += '__{}'.format(datetime.datetime.now().strftime("%I:%M%p").replace(':', '_'))
         self.ticket_path = '{}/{}'.format(self.day_dir, self.ticket)
 
     def start(self):
