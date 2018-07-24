@@ -9,9 +9,9 @@ from Export import Export
 
 def dir_check():
     home = os.path.expanduser('~')
-    if not os.path.isdir('{}/.timesheets'.format(home)):
-        os.mkdir('{}/.timesheets'.format(home))
-    return '{}/.timesheets'.format(home)
+    if not os.path.isdir('{}/dropbox/.timesheets'.format(home)):
+        os.mkdir('{}/dropbox/.timesheets'.format(home))
+    return '{}/dropbox/.timesheets'.format(home)
 
 def new_ticket(args):
     directory = dir_check()
