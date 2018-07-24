@@ -1,3 +1,4 @@
+from configparser import SafeConfigParser
 import argparse
 import datetime
 import time
@@ -7,11 +8,19 @@ from time_clock.bin.close_task import CloseTask
 from time_clock.bin.export import Export
 
 
+
+def get_config(opt):
+    config = SafeConfigParser()
+    config.read('config.ini')
+    return config.getboolean('options', opt)
+
 def dir_check():
     home = os.path.expanduser('~')
-    if not os.path.isdir('{}/dropbox/.timesheets'.format(home)):
-        os.mkdir('{}/dropbox/.timesheets'.format(home))
-    return '{}/dropbox/.timesheets'.format(home)
+    if get_config('dropbox'):
+        home += '/dropbox'
+    if not os.path.isdir('{}/.timesheets'.format(home)):
+        os.mkdir('{}/.timesheets'.format(home))
+    return '{}/.timesheets'.format(home)
 
 def new_ticket(args):
     directory = dir_check()
