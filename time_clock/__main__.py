@@ -12,11 +12,16 @@ from time_clock.export import Export
 def set_config(args):
     config = SafeConfigParser()
     config.read('./time_clock/config.ini')
-    if args.set in config['settings']:
-        config.set('settings', args.set, args.value)
+    if args.option in config['settings']:
+        config.set('settings', args.option, args.value)
         with open('./time_clock/config.ini', 'w') as config_file:
             config.write(config_file)
-            print('Config setting {} set to {}'.format(args.set, args.value))
+            print('Config setting {} set to {}'.format(args.option, args.value))
+    else:
+        print('{} not in settings'.format(args.option))
+
+def list_config(args):
+    print(args)
 
 def get_config_setting(opt):
     config = SafeConfigParser()
@@ -93,6 +98,7 @@ export_parser.add_argument(
     '-m',
     help='Export data for month',
     metavar='1-12',
+    choices=range(1 - 13),
     type=int)
 export_parser.add_argument(
     '--year',
@@ -117,18 +123,17 @@ export_parser.add_argument(
 export_parser.set_defaults(func=export_data)
 
 config_parser = subparsers.add_parser('config')
-config_set = config_parser.add_mutually_exclusive_group()
-config_set.add_argument(
-    '--set',
-    '-s',
-    help='config option to set',
-    type=str)
-config_parser.add_argument(
-    'value',
-    help='boolean true/false',
-    choices=['true', 'false'],
-    type=str)
-config_parser.set_defaults(func=set_config)
+config_choices = config_parser.add_subparsers()
+config_set = config_choices.add_parser(
+    'set',
+    help='set config setting')
+config_set.add_argument('option', help='what option to set')
+config_set.add_argument('value', choices=['true', 'false'])
+config_set.set_defaults(func=set_config)
+config_list = config_choices.add_parser(
+    'list',
+    help='list config settings')
+config_list.set_defaults(func=list_config)
 
 args = parser.parse_args()
 
