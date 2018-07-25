@@ -14,6 +14,9 @@ class OpenTask():
         self.directory = directory
         self.project = self.args.project if self.args.project else ''
         self.company = self.args.company if self.args.company else ''
+        if self.config['strict'] and (not self.args.project or not self.args.company):
+            print('Strict mode, please supply project and company.')
+            return
         self.make_directories()
         self.make_unique_ticket()
         self.start()

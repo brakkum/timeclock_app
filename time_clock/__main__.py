@@ -16,6 +16,7 @@ def set_config(args):
         config.set('settings', args.set, args.value)
         with open('./time_clock/config.ini', 'w') as config_file:
             config.write(config_file)
+            print('Config setting {} set to {}'.format(args.set, args.value))
 
 def get_config_setting(opt):
     config = SafeConfigParser()
