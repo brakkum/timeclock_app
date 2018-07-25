@@ -3,7 +3,8 @@ import time
 import os
 
 class OpenTask():
-    def __init__(self, directory, args):
+    def __init__(self, directory, args, config):
+        self.config = config
         self.args = args
         self.ticket = self.args.ticket
         if '__' in self.ticket:

@@ -12,19 +12,27 @@ from time_clock.export import Export
 def set_config(args):
     config = SafeConfigParser()
     config.read('./time_clock/config.ini')
-    if args.set in config['options']:
-        config.set('options', args.set, args.value)
+    if args.set in config['settings']:
+        config.set('settings', args.set, args.value)
         with open('./time_clock/config.ini', 'w') as config_file:
             config.write(config_file)
 
-def get_config(opt):
+def get_config_setting(opt):
     config = SafeConfigParser()
     config.read('./time_clock/config.ini')
-    return config.getboolean('options', opt)
+    return config.getboolean('settings', opt)
+
+def get_config():
+    config = SafeConfigParser()
+    config.read('./time_clock/config.ini')
+    config_obj = {}
+    for setting in config.options('settings'):
+        config_obj[setting] = config.getboolean('settings', setting)
+    return config_obj
 
 def dir_check():
     home = os.path.expanduser('~')
-    if get_config('dropbox'):
+    if get_config_setting('dropbox'):
         home += '/dropbox'
     if not os.path.isdir('{}/.timesheets'.format(home)):
         os.mkdir('{}/.timesheets'.format(home))
@@ -35,7 +43,7 @@ def new_ticket(args):
     if '.open' in os.listdir(directory):
         print('There is already an open task, please close.')
     else: 
-        OpenTask(directory, args)
+        OpenTask(directory, args, get_config())
 
 def close_ticket(args):
     directory = dir_check()
@@ -49,7 +57,7 @@ def export_data(args):
     if '.open' in os.listdir(directory):
         print('Please close the open ticket to continue')
     else:
-        Export(directory, args)
+        Export(directory, args, get_config())
 
 
 parser = argparse.ArgumentParser()
@@ -122,6 +130,7 @@ config_parser.add_argument(
 config_parser.set_defaults(func=set_config)
 
 args = parser.parse_args()
+
 
 def main():
     args.func(args)

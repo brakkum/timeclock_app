@@ -2,7 +2,8 @@ import datetime
 import os
 
 class Export():
-    def __init__(self, directory, args):
+    def __init__(self, directory, args, config):
+        self.config = config
         self.directory = directory
         self.args = args
         self.set_options()
