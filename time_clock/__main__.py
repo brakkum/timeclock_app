@@ -98,7 +98,7 @@ export_parser.add_argument(
     '-m',
     help='Export data for month',
     metavar='1-12',
-    choices=range(1 - 13),
+    choices=range(1, 13),
     type=int)
 export_parser.add_argument(
     '--year',
