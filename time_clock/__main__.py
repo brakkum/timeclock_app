@@ -21,7 +21,9 @@ def set_config(args):
         print('{} not in settings'.format(args.option))
 
 def list_config(args):
-    print(args)
+    help_doc = open('./time_clock/config_help', 'r').readlines()
+    for line in help_doc:
+        print(line.strip())
 
 def get_config_setting(opt):
     config = SafeConfigParser()
