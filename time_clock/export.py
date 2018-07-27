@@ -2,8 +2,7 @@ import datetime
 import os
 
 class Export():
-    def __init__(self, directory, args, config):
-        self.config = config
+    def __init__(self, directory, args):
         self.directory = directory
         self.args = args
         self.set_options()
@@ -21,6 +20,7 @@ class Export():
         if self.ticket and '_' in self.ticket:
             self.ticket = self.ticket.replace('_', '-')
 
+    # TODO Export all outputs table with descriptors
     def get_records(self):
         try:
             days_worked = [x for x in os.listdir(self.month_dir) if x != '.DS_Store']

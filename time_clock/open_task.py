@@ -1,10 +1,10 @@
+from time_clock.config_funcs import get_config_setting
 import datetime
 import time
 import os
 
 class OpenTask():
-    def __init__(self, directory, args, config):
-        self.config = config
+    def __init__(self, directory, args):
         self.args = args
         self.ticket = self.args.ticket
         if '__' in self.ticket:
@@ -14,7 +14,7 @@ class OpenTask():
         self.directory = directory
         self.project = self.args.project if self.args.project else ''
         self.company = self.args.company if self.args.company else ''
-        if self.config['strict'] and (not self.args.project or not self.args.company):
+        if get_config_setting('strict') and (not self.args.project or not self.args.company):
             print('Strict mode, please supply project and company.')
             return
         self.make_directories()
