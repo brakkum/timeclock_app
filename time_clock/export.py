@@ -7,7 +7,8 @@ class Export():
         self.args = args
         self.set_options()
         self.get_records()
-        self.output_data()
+        if not self.tripped:
+            self.output_data()
 
     def set_options(self):
         self.month = self.args.month if self.args.month else datetime.date.today().month
@@ -21,24 +22,41 @@ class Export():
         if self.ticket and '_' in self.ticket:
             self.ticket = self.ticket.replace('_', '-')
         self.data = {}
+        self.tripped = False
 
     def output_data(self):
-        print(self.data)
+        grand_total = 0
+        for company in self.data:
+            print('{:-^50s}\n{:^50s}\n{:-^50s}'.format('', 'Company ' + company, ''))
+            company_total = 0
+            for project in self.data[company]:
+                print('{:>48s}'.format('Project {}'.format(project)))
+                project_total = 0
+                print('{:>50}'.format('-' * 35))
+                for ticket in self.data[company][project]:
+                    ticket_time = self.seconds_to_quarter_hours(self.data[company][project][ticket])
+                    print('{0:>40s}: {1:>03.2f}'.format(ticket, ticket_time))
+                    project_total += ticket_time
+                print('{:>50}'.format('-' * 35))
+                print('{:>38}'.format('Project: {}\n'.format(project_total)))
+                company_total += project_total
+            print('{:^50}'.format(company + ' total: ' + str(company_total)))
+            grand_total += company_total
+        print('{:-^50}'.format(''))
+        print('{:^50}'.format('Grand total: ' + str(grand_total)))
+        print('{:-^50}'.format(''))
 
     def structure_data(self, data):
-        # data[0, 1].strip data[2, 3][1:].strip() data[4][1:].strip()
         company = data[4][1:].strip()
-        if company == '':
+        if not company:
             company = 'none'
         project = data[2][1:].strip()
-        if project == '':
+        if not project:
             project = 'none'
         ticket = data[3][1:].strip().split('__')[0]
-        if ticket == '':
+        if not ticket:
             ticket = 'none'
-        start_time = int(data[0].strip())
-        end_time = int(data[1].strip())
-        ticket_time = end_time - start_time
+        ticket_time = int(data[1].strip()) - int(data[0].strip())
         ticket_entry = {ticket: ticket_time}
         project_entry = {project: ticket_entry}
 
@@ -57,7 +75,6 @@ class Export():
             # company not here yet
             self.data[company] = project_entry
 
-    # TODO Export all outputs table with descriptors
     def get_records(self):
         try:
             days_worked = [x for x in os.listdir(self.month_dir) if x != '.DS_Store']
@@ -84,6 +101,7 @@ class Export():
                     self.structure_data(item)
         except:
             print('That month has no records')
+            self.tripped = True
 
     def seconds_to_quarter_hours(self, seconds):
         hours = seconds / 3600
