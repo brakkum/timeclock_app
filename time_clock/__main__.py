@@ -37,8 +37,12 @@ def export_data(args):
     else:
         Export(directory, args)
 
+def print_help(args):
+    parser.print_help()
+
 
 parser = argparse.ArgumentParser()
+parser.set_defaults(func=print_help)
 subparsers = parser.add_subparsers()
 
 task_parser = subparsers.add_parser('ticket')
