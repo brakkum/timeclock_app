@@ -7,8 +7,6 @@ class Export():
         self.args = args
         self.set_options()
         self.get_records()
-        if not self.tripped:
-            self.output_data()
 
     def set_options(self):
         self.month = self.args.month if self.args.month else datetime.date.today().month
@@ -22,7 +20,6 @@ class Export():
         if self.ticket and '_' in self.ticket:
             self.ticket = self.ticket.replace('_', '-')
         self.data = {}
-        self.tripped = False
 
     def output_data(self):
         grand_total = 0
@@ -104,9 +101,9 @@ class Export():
                         else:
                             continue
                     self.structure_data(item)
+            self.output_data()
         except:
             print('That month has no records')
-            self.tripped = True
 
     def seconds_to_quarter_hours(self, seconds):
         hours = seconds / 3600
