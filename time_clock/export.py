@@ -46,7 +46,7 @@ class Export():
                 print('{:^50}'.format(company + ' total: ' + str(company_total)))
                 grand_total += company_total
             print('{:-^50}'.format(''))
-            print('{:-^50}'.format(' Grand total: ' + str(grand_total) + ' '))
+            print('{:|^50}'.format(' Grand total: ' + str(grand_total) + ' '))
             print('{:-^50}'.format(''))
         else:
             print('No matches found.')
