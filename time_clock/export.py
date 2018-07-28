@@ -26,25 +26,28 @@ class Export():
 
     def output_data(self):
         grand_total = 0
-        for company in self.data:
-            print('{:-^50s}\n{:^50s}\n{:-^50s}'.format('', 'Company ' + company, ''))
-            company_total = 0
-            for project in self.data[company]:
-                print('{:>48s}'.format('Project {}'.format(project)))
-                project_total = 0
-                print('{:>50}'.format('-' * 35))
-                for ticket in self.data[company][project]:
-                    ticket_time = self.seconds_to_quarter_hours(self.data[company][project][ticket])
-                    print('{0:>40s}: {1:>03.2f}'.format(ticket, ticket_time))
-                    project_total += ticket_time
-                print('{:>50}'.format('-' * 35))
-                print('{:>38}'.format('Project: {}\n'.format(project_total)))
-                company_total += project_total
-            print('{:^50}'.format(company + ' total: ' + str(company_total)))
-            grand_total += company_total
-        print('{:-^50}'.format(''))
-        print('{:^50}'.format('Grand total: ' + str(grand_total)))
-        print('{:-^50}'.format(''))
+        if self.data:
+            for company in self.data:
+                print('{:-^50s}\n{:^50s}\n{:-^50s}'.format('', 'Company ' + company, ''))
+                company_total = 0
+                for project in self.data[company]:
+                    print('{:>48s}'.format('Project {}'.format(project)))
+                    project_total = 0
+                    print('{:>50}'.format('-' * 35))
+                    for ticket in self.data[company][project]:
+                        ticket_time = self.seconds_to_quarter_hours(self.data[company][project][ticket])
+                        print('{0:>40s}: {1:>03.2f}'.format(ticket, ticket_time))
+                        project_total += ticket_time
+                    print('{:>50}'.format('-' * 35))
+                    print('{:>38}'.format('Project: {}\n'.format(project_total)))
+                    company_total += project_total
+                print('{:^50}'.format(company + ' total: ' + str(company_total)))
+                grand_total += company_total
+            print('{:-^50}'.format(''))
+            print('{:^50}'.format('Grand total: ' + str(grand_total)))
+            print('{:-^50}'.format(''))
+        else:
+            print('No matches found.')
 
     def structure_data(self, data):
         company = data[4][1:].strip()
