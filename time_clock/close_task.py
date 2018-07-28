@@ -27,7 +27,7 @@ class CloseTask():
         ticket_file.write('\n' + str(int(time.time())))
         ticket_file.write('\np' + self.project)
         ticket_file.write('\nt' + self.ticket)
-        ticket_file.write('\nc' + self.company)
+        ticket_file.write('\nc\n' + self.company)
         ticket_file.close()
 
     def clear_open_file(self):

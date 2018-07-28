@@ -7,6 +7,7 @@ class Export():
         self.args = args
         self.set_options()
         self.get_records()
+        self.output_data()
 
     def set_options(self):
         self.month = self.args.month if self.args.month else datetime.date.today().month
@@ -19,6 +20,42 @@ class Export():
             self.ticket = self.ticket.replace('__', '_')
         if self.ticket and '_' in self.ticket:
             self.ticket = self.ticket.replace('_', '-')
+        self.data = {}
+
+    def output_data(self):
+        print(self.data)
+
+    def structure_data(self, data):
+        # data[0, 1].strip data[2, 3][1:].strip() data[4][1:].strip()
+        company = data[4][1:].strip()
+        if company == '':
+            company = 'none'
+        project = data[2][1:].strip()
+        if project == '':
+            project = 'none'
+        ticket = data[3][1:].strip().split('__')[0]
+        if ticket == '':
+            ticket = 'none'
+        start_time = int(data[0].strip())
+        end_time = int(data[1].strip())
+        ticket_time = end_time - start_time
+        ticket_entry = {ticket: ticket_time}
+        project_entry = {project: ticket_entry}
+
+        if company in self.data:
+            if project in self.data[company]:
+                if ticket in self.data[company][project]:
+                    # ticket is here, add to total
+                    self.data[company][project][ticket] += ticket_time
+                else:
+                    # ticket not here yet
+                    self.data[company][project][ticket] = ticket_time
+            else:
+                # project not here yet
+                self.data[company][project] = ticket_entry
+        else:
+            # company not here yet
+            self.data[company] = project_entry
 
     # TODO Export all outputs table with descriptors
     def get_records(self):
@@ -44,11 +81,7 @@ class Export():
                             pass
                         else:
                             continue
-                    seconds += int(item[1]) - int(item[0])
-            if seconds == 0:
-                print('No time found')
-            else:
-                print(self.seconds_to_quarter_hours(seconds))
+                    self.structure_data(item)
         except:
             print('That month has no records')
 
