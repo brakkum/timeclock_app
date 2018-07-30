@@ -109,6 +109,4 @@ class Export():
             print('That month has no records')
 
     def seconds_to_quarter_hours(self, seconds):
-        hours = seconds / 3600
-        quarters = round(hours / .25)
-        return quarters * .25
+        return round((seconds / 3600) / .25) * .25
