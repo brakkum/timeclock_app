@@ -48,14 +48,17 @@ class Export():
         else:
             print('No matches found.')
 
+    def strip_beginning_and_end(self, chunk):
+        return chunk[1:].strip().split('__')[0]
+
     def structure_data(self, data):
-        company = data[4][1:].strip()
+        company = self.strip_beginning_and_end(data[4])
         if not company:
             company = 'none'
-        project = data[2][1:].strip()
+        project = self.strip_beginning_and_end(data[2])
         if not project:
             project = 'none'
-        ticket = data[3][1:].strip().split('__')[0]
+        ticket = self.strip_beginning_and_end(data[3])
         if not ticket:
             ticket = 'none'
         ticket_time = int(data[1].strip()) - int(data[0].strip())
