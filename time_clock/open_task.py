@@ -3,7 +3,8 @@ import datetime
 import time
 import os
 
-class OpenTask():
+
+class OpenTask:
     def __init__(self, directory, args):
         self.args = args
         self.ticket = self.args.ticket
@@ -57,11 +58,11 @@ class OpenTask():
 
     def start(self):
         with open('{}/.open'.format(self.directory), 'a') as open_file:
-            open_file.write(self.ticket_path + '::') # path to ticket
-            open_file.write(str(int(time.time())) + '::') # start time
-            open_file.write(self.project + '::') # project
-            open_file.write(self.ticket + '::') # ticket
-            open_file.write(self.company + '::') # company
+            open_file.write(self.ticket_path + '::')  # path to ticket
+            open_file.write(str(int(time.time())) + '::')  # start time
+            open_file.write(self.project + '::')  # project
+            open_file.write(self.ticket + '::')  # ticket
+            open_file.write(self.company + '::')  # company
         print('Started working on {} at {}'.format(self.ticket.split('__')[0], datetime.datetime.now().strftime("%I:%M%p")))
         self.make_archive()
 

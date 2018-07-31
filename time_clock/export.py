@@ -1,7 +1,8 @@
 import datetime
 import os
 
-class Export():
+
+class Export:
     def __init__(self, directory, args):
         self.directory = directory
         self.args = args

@@ -1,7 +1,8 @@
 import os
 import time
 
-class CloseTask():
+
+class CloseTask:
     def __init__(self, directory):
         self.directory = directory
         self.contents = self.open_file()

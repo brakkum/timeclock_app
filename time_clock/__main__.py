@@ -1,7 +1,5 @@
 from time_clock.config_funcs import set_config, list_config, get_config_setting
 import argparse
-import datetime
-import time
 import os
 from time_clock.open_task import OpenTask
 from time_clock.close_task import CloseTask
@@ -16,19 +14,22 @@ def dir_check():
         os.mkdir('{}/.timesheets'.format(home))
     return '{}/.timesheets'.format(home)
 
+
 def new_ticket(args):
     directory = dir_check()
     if '.open' in os.listdir(directory):
         print('There is already an open task, please close.')
-    else: 
+    else:
         OpenTask(directory, args)
+
 
 def close_ticket(args):
     directory = dir_check()
-    if not '.open' in os.listdir(directory):
+    if '.open' not in os.listdir(directory):
         print('No ticket to close')
     else:
         CloseTask(directory)
+
 
 def export_data(args):
     directory = dir_check()
@@ -36,6 +37,7 @@ def export_data(args):
         print('Please close the open ticket to continue')
     else:
         Export(directory, args)
+
 
 def print_help(args):
     parser.print_help()
