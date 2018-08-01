@@ -20,7 +20,8 @@ def new_ticket(args):
     if '.open' in os.listdir(directory):
         print('There is already an open task, please close.')
     else:
-        OpenTask(directory, args)
+        new_task = OpenTask(directory, args)
+        new_task.open_new_ticket()
 
 
 def close_ticket(args):
