@@ -29,7 +29,8 @@ def close_ticket(args):
     if '.open' not in os.listdir(directory):
         print('No ticket to close')
     else:
-        CloseTask(directory)
+        close_task = CloseTask(directory)
+        close_task.close()
 
 
 def export_data(args):

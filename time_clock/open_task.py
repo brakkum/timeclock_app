@@ -8,14 +8,15 @@ class OpenTask:
     def __init__(self, directory, args):
         self.args = args
         self.ticket = self.args.ticket
-        self.check_for_underscores()
         self.directory = directory
         self.project = self.args.project if self.args.project else ''
         self.company = self.args.company if self.args.company else ''
         self.year = str(datetime.date.today().year)
+        self.year_dir = '{}/{}'.format(self.directory, self.year)
         self.month = str(datetime.date.today().month)
+        self.month_dir = '{}/{}'.format(self.year_dir, self.month)
         self.today = str(datetime.date.today().day)
-        self.day_dir = '{}/{}/{}/{}'.format(self.directory, self.year, self.month, self.today)
+        self.day_dir = '{}/{}'.format(self.month_dir, self.today)
         self.ticket_path = '{}/{}'.format(self.day_dir, self.ticket)
         self.start_time = datetime.datetime.now().strftime("%I:%M%p")
 
@@ -23,8 +24,9 @@ class OpenTask:
         if self.is_strict():
             print('Strict mode, please supply project and company.')
         else:
+            self.check_for_underscores()
             self.make_directories()
-            self.add_time_to_ticket()
+            self.add_time_to_ticket_filename()
             self.start()
 
     def is_strict(self):
@@ -32,9 +34,13 @@ class OpenTask:
 
     def check_for_underscores(self):
         if '__' in self.ticket:
-            self.ticket = self.ticket.replace('__', '_')
+            new_ticket = self.ticket.replace('__', '_')
+            self.ticket_path.replace(self.ticket, new_ticket)
+            self.ticket = new_ticket
         if '_' in self.ticket:
-            self.ticket = self.ticket.replace('_', '-')
+            new_ticket = self.ticket.replace('_', '-')
+            self.ticket_path.replace(self.ticket, new_ticket)
+            self.ticket = new_ticket
 
     def make_directories(self):
         self.make_year_dir()
@@ -43,17 +49,17 @@ class OpenTask:
 
     def make_year_dir(self):
         if self.year not in os.listdir(self.directory):
-            os.mkdir('{}/{}'.format(self.directory, self.year))
+            os.mkdir(self.year_dir)
 
     def make_month_dir(self):
-        if self.month not in os.listdir('{}/{}/'.format(self.directory, self.year)):
-            os.mkdir('{}/{}/{}'.format(self.directory, self.year, self.month))
+        if self.month not in os.listdir(self.year_dir):
+            os.mkdir(self.month_dir)
 
     def make_day_dir(self):
-        if self.today not in os.listdir('{}/{}/{}'.format(self.directory, self.year, self.month)):
-            os.mkdir('{}/{}/{}/{}'.format(self.directory, self.year, self.month, self.today))
+        if self.today not in os.listdir(self.month_dir):
+            os.mkdir(self.day_dir)
 
-    def add_time_to_ticket(self):
+    def add_time_to_ticket_filename(self):
         self.ticket += '__{}'.format(datetime.datetime.now().strftime("%I:%M%p").replace(':', '_'))
 
     def start(self):
