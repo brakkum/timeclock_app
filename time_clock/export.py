@@ -41,9 +41,6 @@ class Export:
         else:
             print('No matches found.')
 
-    def strip_beginning_and_end(self, chunk):
-        return chunk[1:].strip().split('__')[0]
-
     def structure_data(self, data):
         company = self.strip_beginning_and_end(data[4])
         if not company:
@@ -101,8 +98,13 @@ class Export:
                             continue
                     self.structure_data(item)
             self.output_data()
-        except:
+        except FileNotFoundError:
             print('That month has no records')
 
-    def seconds_to_quarter_hours(self, seconds):
+    @staticmethod
+    def strip_beginning_and_end(chunk):
+        return chunk[1:].strip().split('__')[0]
+
+    @staticmethod
+    def seconds_to_quarter_hours(seconds):
         return round((seconds / 3600) / .25) * .25
