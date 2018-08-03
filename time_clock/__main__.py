@@ -38,7 +38,8 @@ def export_data(args):
     if '.open' in os.listdir(directory):
         print('Please close the open ticket to continue')
     else:
-        Export(directory, args)
+        export = Export(directory, args)
+        export.get_records()
 
 
 def print_help(args):

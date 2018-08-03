@@ -6,20 +6,12 @@ class Export:
     def __init__(self, directory, args):
         self.directory = directory
         self.args = args
-        self.set_options()
-        self.get_records()
-
-    def set_options(self):
         self.month = self.args.month if self.args.month else datetime.date.today().month
         self.year = self.args.year if self.args.year else datetime.date.today().year
         self.month_dir = '{}/{}/{}'.format(self.directory, self.year, self.month)
         self.project = self.args.project if self.args.project else None
         self.ticket = self.args.ticket if self.args.ticket else None
         self.company = self.args.company if self.args.company else None
-        if self.ticket and '__' in self.ticket:
-            self.ticket = self.ticket.replace('__', '_')
-        if self.ticket and '_' in self.ticket:
-            self.ticket = self.ticket.replace('_', '-')
         self.data = {}
 
     def output_data(self):
@@ -82,9 +74,12 @@ class Export:
             self.data[company] = project_entry
 
     def get_records(self):
+        if self.ticket and '__' in self.ticket:
+            self.ticket = self.ticket.replace('__', '_')
+        if self.ticket and '_' in self.ticket:
+            self.ticket = self.ticket.replace('_', '-')
         try:
             days_worked = [x for x in os.listdir(self.month_dir) if x != '.DS_Store']
-            seconds = 0
             for days in days_worked:
                 day_items = [x for x in os.listdir('{}/{}'.format(self.month_dir, days)) if x != '.DS_Store']
                 for items in day_items:
